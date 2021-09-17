@@ -1,9 +1,79 @@
+import java.util.Scanner;
+
 public class TicTacToe {
 
-    SquareMatrix field = new SquareMatrix();
-    int count = 0;
+    private final SquareMatrix field = new SquareMatrix();
+    private int count = 0;
 
-    public int makeAMove(int i, int j) {
+    static class SquareMatrix {
+
+        private char[][] arr;
+        private int n;
+
+        SquareMatrix() {
+            n = 3;
+            arr = new char[n][n];
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    arr[i][j] = '-';
+                }
+            }
+        }
+
+        SquareMatrix(int n) {
+            this.n = n;
+            arr = new char[n][n];
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    arr[i][j] = '-';
+                }
+            }
+        }
+
+        SquareMatrix(char[][] arr, int n) {
+            this.n = n;
+            arr = new char[n][n];
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    this.arr[i][j] = arr[i][j];
+                }
+            }
+        }
+
+        private void setArrIJ(int i, int j, char value) {
+            arr[i][j] = value;
+        }
+
+        private char getArrIJ(int i, int j) {
+            return arr[i][j];
+        }
+
+        private int getN() {
+            return n;
+        }
+
+        private void setN(int n) {
+            this.n = n;
+        }
+
+        private void printArray() {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (j != n - 1) {
+                        System.out.print(arr[i][j] + " | ");
+                    } else {
+                        System.out.print(arr[i][j]);
+                    }
+                }
+                System.out.println();
+                if (i != n - 1) {
+                    System.out.println("---------");
+                }
+            }
+        }
+    }
+
+    private int makeAMove(int i, int j) {
 
         char move;
         if (i > 2 || i < 0 || j > 2 || j < 0 || field.getArrIJ(i, j) != '-') {
@@ -73,11 +143,39 @@ public class TicTacToe {
         return 0;
     }
 
-    public int getCount() {
+    private int getCount() {
         return count;
     }
 
-    public void printField() {
+    private void printField() {
         field.printArray();
+    }
+
+    public void startGame() {
+
+        TicTacToe ticTacToe = new TicTacToe();
+        Scanner in = new Scanner(System.in);
+        int x;
+        int y;
+        int code = 0;
+
+        while (ticTacToe.getCount() < 9) {
+            if (code == 0) {
+                System.out.println("Новый ход.");
+            }
+            System.out.println("Введите координату x:");
+            x = in.nextInt();
+            System.out.println("Введите координату y:");
+            y = in.nextInt();
+            code = ticTacToe.makeAMove(x, y);
+            if (code != -1) {
+                System.out.println("Ход выполнен успешно!");
+                ticTacToe.printField();
+            } else {
+                System.out.println("Ячейка занята или не существует.");
+                System.out.println("Повторите ввод.");
+            }
+        }
+        System.out.println("Игра окончена!");
     }
 }
